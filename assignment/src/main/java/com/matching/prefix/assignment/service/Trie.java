@@ -54,7 +54,7 @@ public class Trie {
         int searchTextLength = searchText.length();
         TrieNode pointer = root;
 
-        int i = 0;
+        int i = 0, prevMatch = 0;
         while (i < searchTextLength) {
             // check first character of the searchText
             char ch = searchText.charAt(i);
@@ -63,6 +63,11 @@ public class Trie {
             if (children.containsKey(ch)) {
                 result.append(children.get(ch).getValue());
                 pointer = children.get(ch);
+
+                if (pointer.isEnd()) {
+                    prevMatch = i + 1;
+                }
+
                 i++;
             } else {
                 // we don't have ch matching in the trie
@@ -71,6 +76,11 @@ public class Trie {
             }
 
         }
+
+        // if the last pointer is not the end word
+        // then return previous matching word
+        if (!pointer.isEnd())
+            return result.substring(0, prevMatch);
 
         return result.toString();
     }
